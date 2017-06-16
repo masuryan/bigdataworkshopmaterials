@@ -1,0 +1,34 @@
+**** Hadoop Commands ****
+
+# 1. Print the Hadoop version
+hadoop version
+# 2. List the contents of the root directory in HDFS
+#
+hadoop fs -ls /
+
+#Copy command
+hdfs dfs -put /home/sshuser/poc/Names.csv /names.csv
+
+*****Spark Demo****
+sc.textFile("wasb://demobombayspark-2017-05-07t05-12-08-454z@demobombaysparkstorage.blob.core.windows.net/names.csv").map(name => (name.charAt(0),name)).groupByKey().collect()
+
+sc.textFile("wasb://demobombayspark-2017-05-07t05-12-08-454z@demobombaysparkstorage.blob.core.windows.net/names.csv").distinct(numPartitions=6).map(name => (name.charAt(0),name)).groupByKey().collect()
+
+sc.textFile("wasb://demobombayspark-2017-05-07t05-12-08-454z@demobombaysparkstorage.blob.core.windows.net/names.csv").distinct(numPartitions=6).map(name => (name.charAt(0),name)).reduceByKey(_ + _).collect()
+
+
+
+
+val df = sc.textFile("wasb://demobombayspark-2017-05-07t05-12-08-454z@demobombaysparkstorage.blob.core.windows.net/names.csv").toDF("names")
+df.createOrReplaceTempView("users")
+spark.sql("select names from users").show()
+
+
+spark-submit  --class com.tataMotors.ML.Stage1 /home/sshuser/poc/TataMotorsML.jar
+
+
+/usr/hdp/current/hive-server2-hive2/bin/hplsql
+
+https://demobombaysparkstorage.blob.core.windows.net/demobombayspark-2017-05-08t02-37-01-292z/ams/
+
+https://demobombaysparkstorage.blob.core.windows.net/demobombayspark-2017-05-08t02-37-01-292z/names.csv
